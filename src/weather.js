@@ -2,45 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 
 const Weather = () => {
-const [weatherState, setWeatherState] = useState("")
-const [searchValue, setsearchValue] = useState("delhi");
-const [tempInfo, setTempInfo] = useState({})
-let hour = new Date().getHours();
-let minute = new Date().getMinutes();
-let am = "AM"; 
-
-const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const d = new Date();
-let monthName = month[d.getMonth()];
-
-let day = new Date().getDate();
-const weekday = ["Sun","Mon","Tues","Wed","Thurs","Fri","Sat"];
-
-const week  = new Date();
-let weekDay = weekday[week.getDay()]
-
-const [htime, setHtime] = useState(hour);
-const [mtime, setMtime] = useState(minute);
-const [ampm, setAMPM] = useState(am);
-
-const updateTime = () => {
-  am="AM";
-  hour = new Date().getHours();
-  minute = new Date().getMinutes();
-  am = (hour>12)? (hour = hour-12, am ="PM") : am ;
-  hour = (hour<10) ? `0${hour}`:hour;
-  minute = (minute<10) ? `0${minute}`:minute;
-  setHtime(hour);
-  setMtime(minute);
-  setAMPM(am);
-};
-
-
-setInterval(updateTime, 1000);
+const [weatherState, setWeatherState] = useState("");
+const [searchValue, setsearchValue] = useState("Delhi");
+const [tempInfo, setTempInfo] = useState({});
 
    const getWeather = async() => {
        try{
-        let url = `https://api.openweathermap.org/data/2.5/weather?q=${searchValue}&units=metric&appid=df46ab06550bc5f6c8ec265ed2cddfbd`;
+        let url = `https://api.openweathermap.org/data/2.5/weather?q=${searchValue}&units=metric&appid=${process.env.REACT_APP_WEATHER_API}`;
         const res = await fetch(url);
         const data = await res.json();
         const{temp, humidity, pressure} = data.main;
@@ -94,6 +62,37 @@ useEffect(() => {
        }
    }
 }, [tempInfo.weathermood]);
+
+let hour = new Date().getHours();
+let minute = new Date().getMinutes();
+let am = "AM"; 
+
+const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const d = new Date();
+let monthName = month[d.getMonth()];
+
+let day = new Date().getDate();
+const weekday = ["Sun","Mon","Tues","Wed","Thurs","Fri","Sat"];
+
+const week  = new Date();
+let weekDay = weekday[week.getDay()]
+
+const [htime, setHtime] = useState(hour);
+const [mtime, setMtime] = useState(minute);
+const [ampm, setAMPM] = useState(am);
+
+const updateTime = () => {
+  am="AM";
+  hour = new Date().getHours();
+  minute = new Date().getMinutes();
+  am = (hour>12)? (hour = hour-12, am ="PM") : am ;
+  hour = (hour<10) ? `0${hour}`:hour;
+  minute = (minute<10) ? `0${minute}`:minute;
+  setHtime(hour);
+  setMtime(minute);
+  setAMPM(am);
+};
+setInterval(updateTime, 1000);
 
 let sec = tempInfo.sunset;
 let date = new Date(sec*1000);
